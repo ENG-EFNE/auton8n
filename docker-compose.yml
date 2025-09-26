@@ -12,7 +12,6 @@ services:
       - redis
     env_file:
       - .env
-    user: root
     networks:
       - n8n-pool
 
