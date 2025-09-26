@@ -1,0 +1,48 @@
+services:
+  n8n-editor:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    container_name: n8n-editor-pool
+    ports:
+      - "5678:5678"
+    volumes:
+      - ./n8n_editor:/root/.n8n
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    user: root
+    networks:
+      - n8n-pool
+
+  postgres:
+    image: ankane/pgvector
+    restart: always
+    container_name: postgres-pool
+    volumes:
+      - ./postgres_pool:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: n8n
+      POSTGRES_USER: postgres    
+    networks:
+      - n8n-pool
+
+  redis:
+    image: redis:alpine
+    restart: always
+    container_name: redis-pool
+    volumes:
+      - ./redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - n8n-pool
+
+networks:
+  n8n-pool:
+    driver: bridge
+

@@ -1,0 +1,10 @@
+  n8n-workers:
+    image: n8nio/n8n:latest
+    restart: unless-stopped
+    container_name: n8n-workers-pool
+    ports:
+      - "5677:5678"
+    volumes:
+      - ./n8n-editor:/home/node/.n8n       
+    networks:
+      - n8n-pool
